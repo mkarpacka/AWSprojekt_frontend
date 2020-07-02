@@ -1,0 +1,33 @@
+<h1>Welcome to File Uploader</h1>
+
+<h1>List of upload files:</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <div *ngFor="let element of imageList">
+      <div>{{ element.name }}</div>
+      <button (click)="onclickButton(element.name)">Download</button>
+      <button (click)="onclickButton()">Change Name</button>
+    </div>
+  </tbody>
+</table>
+
+<h1>Upload file:</h1>
+
+<!-- <input
+  type="file"
+  ngf-select
+  ng-model="picFile"
+  name="file"
+  accept="image/*"
+  ngf-max-size="2MB"
+  required
+  ngf-model-invalid="errorFile"
+/> -->
+<input type="file" id="customFile" (change)="selectFile($event)" />
+<button (click)="submit()">Submit</button>
