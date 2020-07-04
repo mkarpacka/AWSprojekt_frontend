@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpRequest,
+  HttpHeaders,
+  HttpEvent,
+} from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 class Image {
   name: string;
@@ -15,8 +21,6 @@ export class AwsService {
 
   prepareHeader() {
     this.headersObject = new HttpHeaders();
-
-    this.headersObject.append('Content-Type', 'application/json');
 
     this.headersObject.append('Access-Control-Allow-Origin', '*');
 
@@ -38,18 +42,28 @@ export class AwsService {
   }
 
   public getFiles() {
-    const completePath = 'http://localhost:8080/';
+    const completePath = 'http://localhost:8080';
 
     return this.http.get<Image[]>(completePath, {
       headers: this.headersObject,
     });
   }
 
-  public uploadFiles(filename, file) {
-    const completePath = 'http://localhost:8080/upload/' + filename;
+  uploadFiles(body: FormData) {
+    const completePath = 'http://localhost:8080/upload';
 
-    return this.http.put(completePath, file, {
-      headers: this.headersObject,
-    });
+    return this.http
+      .post(completePath, body, {
+        headers: this.headersObject,
+      })
+      .subscribe(
+        (data) => {
+          console.log(data);
+        },
+        (error) => console.log(error),
+        () => {
+          console.log('completed');
+        }
+      );
   }
 }

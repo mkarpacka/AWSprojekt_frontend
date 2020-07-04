@@ -29,5 +29,5 @@
   required
   ngf-model-invalid="errorFile"
 /> -->
-<input type="file" id="customFile" (change)="selectFile($event)" />
-<button (click)="submit()">Submit</button>
+<input type="file" id="customFile" (change)="fileChange($event)" />
+<button (click)="upload()">Upload</button>

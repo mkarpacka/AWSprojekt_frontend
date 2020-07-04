@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AwsService } from './services/aws.service';
-import { HttpResponse, HttpEventType } from '@angular/common/http';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 class Image {
   name: string;
@@ -13,42 +14,40 @@ class Image {
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-  title = 'Project';
   imageList: Array<Image>;
   selectedFiles: FileList;
-  currentFileUpload: File;
+  file: File;
 
-  constructor(private awsService: AwsService) {}
+  form: FormGroup;
+
+  constructor(private fb: FormBuilder, private awsService: AwsService) {}
+
+  createForm() {
+    this.form = this.fb.group({
+      file_upload: null,
+    });
+  }
 
   onclickButton(name: string) {
     this.awsService.download(name).subscribe();
-  }
-
-  uploadClicked() {
-    this.awsService.download(this.title).subscribe();
-  }
-
-  submit() {
-    this.awsService
-      .uploadFiles('test1.txt', this.currentFileUpload)
-      .subscribe();
-  }
-
-  selectFile(event) {
-    this.selectedFiles = event.target.files;
   }
 
   ngOnInit() {
     this.awsService.getFiles().subscribe((result) => (this.imageList = result));
   }
 
+  fileChange(event: any) {
+    let reader = new FileReader();
+
+    if (event.target.files && event.target.files.length > 0) {
+      this.file = event.target.files[0];
+    }
+  }
+
   upload() {
-    this.currentFileUpload = this.selectedFiles.item(0);
-    this.awsService
-      .uploadFiles('test1.txt', this.currentFileUpload)
-      .subscribe((event) => {
-        console.log(event.toString);
-        this.selectedFiles = undefined;
-      });
+    let body = new FormData();
+    body.append('file', this.file);
+
+    this.awsService.uploadFiles(body);
   }
 }
