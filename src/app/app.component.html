@@ -11,8 +11,8 @@
   <tbody>
     <div *ngFor="let element of imageList">
       <div>{{ element.name }}</div>
-      <button (click)="onclickButton(element.name)">Download</button>
-      <button (click)="onclickButton()">Change Name</button>
+      <button (click)="download(element.name)">Download</button>
+      <button (click)="transformPhoto(element.name)">Transform</button>
     </div>
   </tbody>
 </table>
@@ -29,5 +29,10 @@
   required
   ngf-model-invalid="errorFile"
 /> -->
-<input type="file" id="customFile" (change)="fileChange($event)" />
+<input
+  type="file"
+  id="customFile"
+  accept="image/*"
+  (change)="fileChange($event)"
+/>
 <button (click)="upload()">Upload</button>

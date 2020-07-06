@@ -22,23 +22,24 @@ export class AppComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private awsService: AwsService) {}
 
-  createForm() {
-    this.form = this.fb.group({
-      file_upload: null,
+  download(name: string) {
+    this.awsService
+      .download(name)
+      .subscribe(() => console.log('downloading completed'));
+  }
+
+  transformPhoto(name: string) {
+    this.awsService.addToTransformQueue(name).subscribe(() => {
+      console.log('adding to queue completed');
+      this.getFiles();
     });
   }
 
-  onclickButton(name: string) {
-    this.awsService.download(name).subscribe();
-  }
-
   ngOnInit() {
-    this.awsService.getFiles().subscribe((result) => (this.imageList = result));
+    this.getFiles();
   }
 
   fileChange(event: any) {
-    let reader = new FileReader();
-
     if (event.target.files && event.target.files.length > 0) {
       this.file = event.target.files[0];
     }
@@ -48,6 +49,16 @@ export class AppComponent implements OnInit {
     let body = new FormData();
     body.append('file', this.file);
 
-    this.awsService.uploadFiles(body);
+    this.awsService.uploadFiles(body).subscribe(() => {
+      console.log('upload completed');
+      this.getFiles();
+    });
+  }
+
+  getFiles() {
+    this.awsService.getFiles().subscribe((result) => {
+      this.imageList = result;
+      console.log('getting all files completed');
+    });
   }
 }

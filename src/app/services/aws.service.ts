@@ -23,7 +23,7 @@ export class AwsService {
     this.headersObject = new HttpHeaders();
 
     this.headersObject.append('Access-Control-Allow-Origin', '*');
-
+    this.headersObject.append('Access-Control-Allow-Credentials', 'true');
     this.headersObject.append(
       'Access-Control-Allow-Methods',
 
@@ -52,18 +52,16 @@ export class AwsService {
   uploadFiles(body: FormData) {
     const completePath = 'http://localhost:8080/upload';
 
-    return this.http
-      .post(completePath, body, {
-        headers: this.headersObject,
-      })
-      .subscribe(
-        (data) => {
-          console.log(data);
-        },
-        (error) => console.log(error),
-        () => {
-          console.log('completed');
-        }
-      );
+    return this.http.post(completePath, body, {
+      headers: this.headersObject,
+    });
+  }
+
+  addToTransformQueue(fileName: string) {
+    const completePath = 'http://localhost:8080/send-message';
+
+    return this.http.post(completePath, fileName, {
+      headers: this.headersObject,
+    });
   }
 }
