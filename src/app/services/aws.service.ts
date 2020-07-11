@@ -18,6 +18,7 @@ class Image {
 export class AwsService {
   private headersObject: HttpHeaders;
   constructor(private http: HttpClient) {}
+  path = 'http://ec2-54-237-91-79.compute-1.amazonaws.com:8080/';
 
   prepareHeader() {
     this.headersObject = new HttpHeaders();
@@ -33,7 +34,7 @@ export class AwsService {
 
   public download(name) {
     this.prepareHeader();
-    const completePath = 'http://localhost:8080/d/' + name;
+    const completePath = this.path + '/d/' + name;
 
     return this.http.get(completePath, {
       headers: this.headersObject,
@@ -42,7 +43,7 @@ export class AwsService {
   }
 
   public getFiles() {
-    const completePath = 'http://localhost:8080';
+    const completePath = this.path;
 
     return this.http.get<Image[]>(completePath, {
       headers: this.headersObject,
@@ -50,7 +51,7 @@ export class AwsService {
   }
 
   uploadFiles(body: FormData) {
-    const completePath = 'http://localhost:8080/upload';
+    const completePath = this.path + '/upload';
 
     return this.http.post(completePath, body, {
       headers: this.headersObject,
@@ -58,10 +59,19 @@ export class AwsService {
   }
 
   addToTransformQueue(fileName: string) {
-    const completePath = 'http://localhost:8080/send-message';
+    const completePath = this.path + '/send-message';
 
     return this.http.post(completePath, fileName, {
       headers: this.headersObject,
+    });
+  }
+
+  getMessage() {
+    const completePath = this.path + '/get-message';
+
+    return this.http.get(completePath, {
+      headers: this.headersObject,
+      responseType: 'text',
     });
   }
 }

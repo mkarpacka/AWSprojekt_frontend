@@ -61,4 +61,10 @@ export class AppComponent implements OnInit {
       console.log('getting all files completed');
     });
   }
+
+  getMessage() {
+    this.awsService.getMessage().subscribe(() => {
+      console.log('running getting messages');
+    });
+  }
 }
