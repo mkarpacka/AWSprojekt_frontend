@@ -36,7 +36,10 @@
   accept="image/*"
   (change)="fileChange($event)"
 />
-<button (click)="upload()">Upload</button>
+<!-- <button (click)="upload()">Upload</button> -->
 <div>
   <button (click)="getMessage()">Message</button>
+</div>
+<div>
+  <button (click)="awsS3Verification()">AWS upload</button>
 </div>

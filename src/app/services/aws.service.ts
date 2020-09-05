@@ -18,8 +18,8 @@ class Image {
 export class AwsService {
   private headersObject: HttpHeaders;
   constructor(private http: HttpClient) {}
-  path = 'http://ec2-54-237-91-79.compute-1.amazonaws.com:8080/';
-
+  //path = 'http://ec2-54-237-91-79.compute-1.amazonaws.com:8080/';
+  path = 'http://localhost:8080';
   prepareHeader() {
     this.headersObject = new HttpHeaders();
 
@@ -27,9 +27,13 @@ export class AwsService {
     this.headersObject.append('Access-Control-Allow-Credentials', 'true');
     this.headersObject.append(
       'Access-Control-Allow-Methods',
-
       'GET, POST, PUT, DELETE, OPTIONS'
     );
+    this.headersObject.append(
+      'Access-Control-Allow-Headers',
+      'Content-Type,X-Amz-Date,Authorization,X-Api-Key'
+    );
+    this.headersObject.append('key', 'x-api-key');
   }
 
   public download(name) {
@@ -43,6 +47,7 @@ export class AwsService {
   }
 
   public getFiles() {
+    this.prepareHeader();
     const completePath = this.path;
 
     return this.http.get<Image[]>(completePath, {
@@ -51,6 +56,7 @@ export class AwsService {
   }
 
   uploadFiles(body: FormData) {
+    this.prepareHeader();
     const completePath = this.path + '/upload';
 
     return this.http.post(completePath, body, {
@@ -62,6 +68,23 @@ export class AwsService {
     const completePath = this.path + '/send-message';
 
     return this.http.post(completePath, fileName, {
+      headers: this.headersObject,
+    });
+  }
+
+  awsS3Verification(fileName: string) {
+    this.prepareHeader();
+    const completePath = this.path + '/aws-url/' + fileName;
+
+    return this.http.get(completePath, {
+      headers: this.headersObject,
+      responseType: 'text',
+    });
+  }
+
+  uploadFileWithS3(url: string, body: File) {
+    this.prepareHeader();
+    return this.http.put(url, body, {
       headers: this.headersObject,
     });
   }

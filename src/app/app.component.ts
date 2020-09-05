@@ -67,4 +67,16 @@ export class AppComponent implements OnInit {
       console.log('running getting messages');
     });
   }
+
+  awsS3Verification() {
+    this.awsService.awsS3Verification(this.file.name).subscribe((r) => {
+      console.log('recieved URL');
+      console.log(r);
+
+      this.awsService.uploadFileWithS3(r, this.file).subscribe((wy) => {
+        console.log(wy);
+        this.getFiles();
+      });
+    });
+  }
 }
