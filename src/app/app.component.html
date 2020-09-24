@@ -1,45 +1,45 @@
-<h1>Welcome to File Uploader</h1>
+<h1 class="mat-display-1">Welcome to File Uploader</h1>
 
-<h1>List of upload files:</h1>
+<h1>List of uploaded files:</h1>
+<span class="example-list-section">
+  <ul>
+    <li *ngFor="let img of imageList">
+      <mat-checkbox [(ngModel)]="img.checked">
+        {{ img.name }}
+      </mat-checkbox>
+    </li>
+  </ul>
+</span>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-    </tr>
-  </thead>
-  <tbody>
-    <div *ngFor="let element of imageList">
-      <div>{{ element.name }}</div>
-      <button (click)="download(element.name)">Download</button>
-      <button (click)="transformPhoto(element.name)">Transform</button>
-    </div>
-  </tbody>
-</table>
+<div>
+  <button mat-stroked-button color="primary" (click)="transformPhoto()">
+    Transform selected
+  </button>
+  <button mat-stroked-button color="primary" (click)="downloadMany()">
+    Download selected
+  </button>
+</div>
 
-<h1>Upload file:</h1>
+<h1>Upload a file:</h1>
 
-<!-- <input
-  type="file"
-  ngf-select
-  ng-model="picFile"
-  name="file"
-  accept="image/*"
-  ngf-max-size="2MB"
-  required
-  ngf-model-invalid="errorFile"
-/> -->
 <input
+  #imageInput
+  hidden="true"
   type="file"
+  onclick="this.value=null"
   id="customFile"
   ngf-max-size="4MB"
   accept="image/*"
   (change)="fileChange($event)"
 />
-<!-- <button (click)="upload()">Upload</button> -->
+<button mat-flat-button color="primary" (click)="imageInput.click()">
+  Choose Image
+</button>
+<h3 class="mat-body" *ngIf="file">
+  {{ file.name }}
+</h3>
 <div>
-  <button (click)="getMessage()">Message</button>
-</div>
-<div>
-  <button (click)="awsS3Verification()">AWS upload</button>
+  <button mat-stroked-button color="primary" (click)="awsS3Verification()">
+    AWS upload
+  </button>
 </div>

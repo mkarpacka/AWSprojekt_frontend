@@ -1,6 +1,6 @@
 {
   "/": {
-    "target": "http://localhost:8080",
+    "target": "http://ec2-52-87-233-41.compute-1.amazonaws.com",
     "secure": false,
     "changeOrigin": true
   }

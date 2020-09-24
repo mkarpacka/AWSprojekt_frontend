@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 class Image {
   name: string;
   id: number;
+  checked: boolean;
 }
 
 @Injectable({
@@ -18,8 +19,7 @@ class Image {
 export class AwsService {
   private headersObject: HttpHeaders;
   constructor(private http: HttpClient) {}
-  //path = 'http://ec2-54-237-91-79.compute-1.amazonaws.com:8080/';
-  path = 'http://localhost:8080';
+  path = 'http://ec2-52-87-233-41.compute-1.amazonaws.com:8080/';
   prepareHeader() {
     this.headersObject = new HttpHeaders();
 
@@ -55,16 +55,7 @@ export class AwsService {
     });
   }
 
-  uploadFiles(body: FormData) {
-    this.prepareHeader();
-    const completePath = this.path + '/upload';
-
-    return this.http.post(completePath, body, {
-      headers: this.headersObject,
-    });
-  }
-
-  addToTransformQueue(fileName: string) {
+  addToTransformQueue(fileName: string[]) {
     const completePath = this.path + '/send-message';
 
     return this.http.post(completePath, fileName, {
@@ -86,15 +77,6 @@ export class AwsService {
     this.prepareHeader();
     return this.http.put(url, body, {
       headers: this.headersObject,
-    });
-  }
-
-  getMessage() {
-    const completePath = this.path + '/get-message';
-
-    return this.http.get(completePath, {
-      headers: this.headersObject,
-      responseType: 'text',
     });
   }
 }
